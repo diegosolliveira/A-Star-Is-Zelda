@@ -1,2 +1,2 @@
 # A-Star-Is-Zelda
-Trabalho de Iteligência Artificial
+Trabalho de Inteligência Artificial
