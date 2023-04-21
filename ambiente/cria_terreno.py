@@ -3,7 +3,9 @@ tipo_terreno = {
     "a": "AREIA",
     "f": "FLORESTA",
     "m": "MONTANHA",
-    "w": "AGUA"
+    "w": "AGUA",
+    "p": "PAREDE",
+    "c": "CAMINHO"
 }
 
 terreno = []

@@ -1,24 +1,37 @@
 import pygame
 import math
+import cavernas
 import sys
 sys.path.append("./ambiente/conversor-mapas")
-import converte_caverna1
+import converte_terreno
 import cria_terreno
 
 # Definir as cores dos diferentes tipos de terreno
+GRAMA = (124, 252, 0)
 AREIA = (244, 164, 96)
+FLORESTA = (34, 139, 34)
 MONTANHA = (139, 137, 137)
+AGUA = (30, 144, 255)
+CAMINHO = (224, 224, 224)
+PAREDE = (139, 137, 137)
 
 converte_variavel = {
+    "GRAMA": GRAMA,
     "AREIA": AREIA,
+    "FLORESTA": FLORESTA,
     "MONTANHA": MONTANHA,
+    "AGUA": AGUA,
+    "CAMINHO": CAMINHO,
+    "PAREDE": PAREDE
 }
 
 # Definir o custo de cada tipo de terreno
 CUSTO = {
-    AREIA: 10,
-    MONTANHA: 1000,
-
+    GRAMA: 10,
+    AREIA: 20,
+    FLORESTA: 100,
+    MONTANHA: 150,
+    AGUA: 180
 }
 
 pygame.init()
@@ -32,16 +45,22 @@ TAMANHO_TILE = 18
 screen = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
 
 # Definir as dimensões da matriz do terreno
-LINHAS = 28
-COLUNAS = 28
+LINHAS = 42
+COLUNAS = 42
 
 # Definir o terreno manualmente
 caverna1 = cria_terreno.retorna_caverna1()
-caverna1_convertido = converte_caverna1.converte_caverna1(caverna1, converte_variavel)
+caverna2 = cria_terreno.retorna_caverna2()
+caverna3 = cria_terreno.retorna_caverna3()
+terreno = cria_terreno.retorna_terreno()
+terreno_convertido = converte_terreno.converte_terreno(terreno, converte_variavel)
 
-# Adicionar as coordenadas do ponto de partida e destino
-ponto_partida = (3, 13)
-ponto_destino1 = (26, 14)
+# Adicionar as coordenadas do ponto de partida e destino do terreno principal
+ponto_partida = (27, 24)
+ponto_destino1 = (32, 5)
+ponto_destino2 = (17, 39)
+ponto_destino3 = (2, 25)
+ponto_espada = (2, 3)
 
 # Classe utilizada para representar cada célula do terreno, sabendo a posição e custo, além de criar/resetar g, h e f 
 # que são utilizados pelo algoritmo A*
@@ -82,6 +101,7 @@ def desenhar_caminho(caminho_recente, ponto_dest):
     # Desenhar o ponto de destino na nova superfície
     pygame.draw.rect(screen, (79, 79, 79), (ponto_dest[1] * TAMANHO_TILE, ponto_dest[0]*TAMANHO_TILE, TAMANHO_TILE, TAMANHO_TILE))
 
+    clock = pygame.time.Clock()
     # Desenhar o caminho na nova superfície
     for celula in caminho_recente:
         x, y = celula
@@ -90,12 +110,12 @@ def desenhar_caminho(caminho_recente, ponto_dest):
 
         # Desenhar a nova superfície na janela do Pygame
         screen.blit(screen, (0, 0))
-        pygame.display.flip()
-        pygame.time.wait(70)
+        pygame.display.update()
+        clock.tick(25)
 
 
-def criar_celulas(caverna1_convertido):
-    celulas = [[Celula((linha, coluna), CUSTO[caverna1_convertido[linha][coluna]]) for coluna in range(COLUNAS)] for linha in range(LINHAS)]
+def criar_celulas(terreno_convertido):
+    celulas = [[Celula((linha, coluna), CUSTO[terreno_convertido[linha][coluna]]) for coluna in range(COLUNAS)] for linha in range(LINHAS)]
     
     for linha in range(LINHAS):
         for coluna in range(COLUNAS):
@@ -113,8 +133,6 @@ def criar_celulas(caverna1_convertido):
                     celulas[linha][coluna+1])
     
     return celulas
-
-celulas = criar_celulas(caverna1_convertido)
 
 def algoritmo_a_estrela(celulas, ponto_start, ponto_destino1):
     # Inicializar as listas aberta e fechada
@@ -179,21 +197,26 @@ for event in pygame.event.get():
 # Desenhar o terreno_convertido na tela
 # Mapeamento de tipos de terreno para cores
 cores_terreno = {
-    AREIA: (224, 224, 224),
-    MONTANHA: (179, 179, 179),
+    GRAMA: (140, 211, 70),
+    AREIA: (196, 188, 148),
+    FLORESTA: (1, 115, 53),
+    MONTANHA: (82, 70, 44),
+    AGUA: (45, 72, 181)
 }
 
 # Desenhar o terreno_convertido na tela
-for linha in range(LINHAS):
-    for coluna in range(COLUNAS):
-        # Define a cor da célula com base no valor de custo
-        cor = cores_terreno[caverna1_convertido[linha][coluna]]
+def desenhar_terreno():
+    for linha in range(LINHAS):
+        for coluna in range(COLUNAS):
+            # Define a cor da célula com base no valor de custo
+            cor = cores_terreno[terreno_convertido[linha][coluna]]
 
-        # Desenhar o tile na tela
-        pygame.draw.rect(screen, cor, (coluna * TAMANHO_TILE, linha * TAMANHO_TILE, TAMANHO_TILE-1, TAMANHO_TILE-1))
+            # Desenhar o tile na tela
+            pygame.draw.rect(screen, cor, (coluna * TAMANHO_TILE, linha * TAMANHO_TILE, TAMANHO_TILE-1, TAMANHO_TILE-1))
 
-destinos = [ponto_destino1]
+destinos = [ponto_destino1, ponto_destino2, ponto_destino3]
 partida = ponto_partida
+destinos = sorted(destinos, key=lambda x: algoritmo_a_estrela(criar_celulas(terreno_convertido), partida, x)[1])
 
 #Loop para realizar os testes com todos os destinos
 while destinos:
@@ -201,15 +224,34 @@ while destinos:
     melhor_caminho = None
     proximo_destino = None
 
-    for destino in destinos:
-        celulas = criar_celulas(caverna1_convertido)
-        caminho, custo_total = algoritmo_a_estrela(celulas, partida, destino)
+    for i in destinos:
+        celulas = criar_celulas(terreno_convertido)
+        caminho, custo_total = algoritmo_a_estrela(celulas, partida, i)
 
         if custo_total < menor_custo:
             menor_custo = custo_total
             melhor_caminho = caminho
-            proximo_destino = destino
+            proximo_destino = i
 
+    desenhar_terreno()
     desenhar_caminho(melhor_caminho, proximo_destino)
+
+    if proximo_destino == ponto_destino1:
+        cavernas.cavernas(caverna1, 1)
+
+    elif proximo_destino == ponto_destino2:
+        cavernas.cavernas(caverna2, 2)
+
+    elif proximo_destino == ponto_destino3:
+        cavernas.cavernas(caverna3, 3)
+    
+        # Adiciona o ponto de espada no final da lista, apos a ultima caverna ser acessada
+        destinos.append(ponto_espada)
+
+    screen = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
+
     partida = proximo_destino
     destinos.remove(proximo_destino)
+
+# Adicionar o caminho da espada
+
