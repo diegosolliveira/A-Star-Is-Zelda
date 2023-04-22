@@ -3,7 +3,6 @@ import math
 import sys
 sys.path.append("./ambiente/conversor-mapas")
 import converte_terreno
-import cria_terreno
 
 # Definir as cores dos diferentes tipos de terreno
 def cavernas(terreno, caverna):
@@ -46,6 +45,7 @@ def cavernas(terreno, caverna):
         ponto_partida = (26, 14)
         ponto_destino = (3, 13)
         diamond = pygame.image.load('./ambiente/icons/diamond.png').convert()
+        diamondoff = pygame.image.load('./ambiente/icons/diamondoff.png').convert()
         door = pygame.image.load('./ambiente/icons/doorcaverna.png').convert()
         posicao_diamond = (260, 61)
         posicao_door = ((281, 522))
@@ -54,6 +54,7 @@ def cavernas(terreno, caverna):
         ponto_partida = (25, 13)
         ponto_destino = (2, 13)
         diamond = pygame.image.load('./ambiente/icons/diamond.png').convert()
+        diamondoff = pygame.image.load('./ambiente/icons/diamondoff.png').convert()
         door = pygame.image.load('./ambiente/icons/doorcaverna.png').convert()
         posicao_diamond = (261, 42)
         posicao_door = ((261, 502))
@@ -62,6 +63,7 @@ def cavernas(terreno, caverna):
         ponto_partida = (25, 14)
         ponto_destino = (19, 15)
         diamond = pygame.image.load('./ambiente/icons/diamond.png').convert()
+        diamondoff = pygame.image.load('./ambiente/icons/diamondoff.png').convert()
         door = pygame.image.load('./ambiente/icons/doorcaverna.png').convert()
         posicao_diamond = (302, 383)
         posicao_door = ((281, 522))
@@ -101,7 +103,9 @@ def cavernas(terreno, caverna):
         else:
             return float('inf')
 
-    def desenhar_caminho(caminho_recente):
+    diamante_coletado = False
+
+    def desenhar_caminho(caminho_recente, diamante_coletado):
 
         clock = pygame.time.Clock()
         # Desenhar o caminho na nova superfície
@@ -116,29 +120,15 @@ def cavernas(terreno, caverna):
             # Desenha o mago na posição atual do caminho
             screen.blit(mago, (y * TAMANHO_TILE, x * TAMANHO_TILE))
 
-            # Adicionando os png para a espada portas e portal
-            screen.blit(diamond, posicao_diamond)
-            screen.blit(door, posicao_door)
+            # Verificar se o jogador chegou à espada para remover imagem da espada
+            if celula == ponto_destino:
+                diamante_coletado = True
 
-            # Desenhar a nova superfície na janela do Pygame
-            screen.blit(screen, (0, 0))
-            pygame.display.update()
-            clock.tick(27) 
+            if diamante_coletado:
+                screen.blit(diamondoff, posicao_diamond) # Remove a espada da tela caso ela já tenha sido coletada
 
-    def desenhar_caminho_volta(caminho_recente):
-    
-        clock = pygame.time.Clock()
-        # Desenhar o caminho na nova superfície
-        for i, celula in enumerate(caminho_recente):
-            x, y = celula
-
-            # Para impedir que o "rastro" do mago fique salvo no caminho que ele já passou porem deixa uma cor um pouco diferente
-            # para saber que ele percorreu aquele caminho
-            if i > 0:
-                pygame.draw.rect(screen, (224, 224, 200), (caminho_recente[i-1][1]*TAMANHO_TILE, caminho_recente[i-1][0]*TAMANHO_TILE, TAMANHO_TILE-1, TAMANHO_TILE-1))
-            
-            # Desenha o mago na posição atual do caminho
-            screen.blit(mago, (y * TAMANHO_TILE, x * TAMANHO_TILE))
+            else:
+                screen.blit(diamond, posicao_diamond) # Adiciona a espada na tela caso ainda não tenha sido coletada
 
             # Adicionando os png para a espada portas e portal
             screen.blit(door, posicao_door)
@@ -146,7 +136,7 @@ def cavernas(terreno, caverna):
             # Desenhar a nova superfície na janela do Pygame
             screen.blit(screen, (0, 0))
             pygame.display.update()
-            clock.tick(27)    
+            clock.tick(28)    
 
     def criar_celulas(terreno_convertido):
         celulas = [[Celula((linha, coluna), CUSTO[terreno_convertido[linha][coluna]]) for coluna in range(COLUNAS)] for linha in range(LINHAS)]
@@ -249,8 +239,8 @@ def cavernas(terreno, caverna):
     celulas = criar_celulas(terreno_convertido)
     caminho, custo_total = algoritmo_a_estrela(celulas, ponto_partida, ponto_destino)
 
-    desenhar_caminho(caminho)
+    desenhar_caminho(caminho, diamante_coletado)
     caminho_inverso = caminho[::-1]
-    desenhar_caminho_volta(caminho_inverso)
+    desenhar_caminho(caminho_inverso, diamante_coletado)
 
     screen = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))

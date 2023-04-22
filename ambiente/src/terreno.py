@@ -144,6 +144,7 @@ def desenhar_caminho(caminho_recente, espada_coletada):
         pygame.display.update()
         clock.tick(12)
 
+# Essa função cria uma lista 2D, onde cada célula representa uma posição (linha, coluna) no terreno do jogo.
 def criar_celulas(terreno_convertido):
     celulas = [[Celula((linha, coluna), CUSTO[terreno_convertido[linha][coluna]]) for coluna in range(COLUNAS)] for linha in range(LINHAS)]
     
@@ -218,7 +219,6 @@ def algoritmo_a_estrela(celulas, ponto_start, ponto_destino1):
     return None
 
 # Loop principal do jogo
-
 for event in pygame.event.get():
     if event.type == pygame.QUIT:
         pygame.quit()
@@ -246,7 +246,6 @@ def desenhar_terreno():
 
 destinos = [ponto_destino1, ponto_destino2, ponto_destino3]
 partida = ponto_partida
-destinos = sorted(destinos, key=lambda x: algoritmo_a_estrela(criar_celulas(terreno_convertido), partida, x)[1])
 
 #Loop para realizar os testes com todos os destinos
 while destinos:
