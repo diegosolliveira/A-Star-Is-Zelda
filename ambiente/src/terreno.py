@@ -59,8 +59,9 @@ terreno_convertido = converte_terreno.converte_terreno(terreno, converte_variave
 ponto_partida = (27, 24)
 ponto_destino1 = (32, 5)
 ponto_destino2 = (17, 39)
-ponto_destino3 = (2, 25)
-ponto_espada = (2, 3)
+ponto_destino3 = (1, 24)
+ponto_espada = (1, 2)
+chegada = (5, 6)
 
 # Classe utilizada para representar cada célula do terreno, sabendo a posição e custo, além de criar/resetar g, h e f 
 # que são utilizados pelo algoritmo A*
@@ -96,23 +97,52 @@ def custo(celula_atual, vizinho):
         return celula_atual.custo + vizinho.custo
     else:
         return float('inf')
+    
+sword = pygame.image.load('./ambiente/icons/sword.png')
+swordoff = pygame.image.load('./ambiente/icons/swordoff.png')
+door1 = pygame.image.load('./ambiente/icons/door.png')
+door2 = pygame.image.load('./ambiente/icons/door.png')
+door3 = pygame.image.load('./ambiente/icons/door.png')
+portal = pygame.image.load('./ambiente/icons/portal.png')
+mago = pygame.image.load('./ambiente/icons/mago.png')
 
-def desenhar_caminho(caminho_recente, ponto_dest):
-    # Desenhar o ponto de destino na nova superfície
-    pygame.draw.rect(screen, (79, 79, 79), (ponto_dest[1] * TAMANHO_TILE, ponto_dest[0]*TAMANHO_TILE, TAMANHO_TILE, TAMANHO_TILE))
+espada_coletada = False
+
+def desenhar_caminho(caminho_recente, espada_coletada):
 
     clock = pygame.time.Clock()
     # Desenhar o caminho na nova superfície
-    for celula in caminho_recente:
+    for i, celula in enumerate(caminho_recente):
         x, y = celula
-        rect = pygame.Rect(y * TAMANHO_TILE, x * TAMANHO_TILE, TAMANHO_TILE, TAMANHO_TILE)
-        pygame.draw.rect(screen, (255, 0, 0), rect)
+        
+        # Para impedir que o "rastro" do mago fique salvo no caminho que ele já passou porem deixa uma cor um pouco diferente
+        # para saber que ele percorreu aquele caminho
+        if i > 0:
+            pygame.draw.rect(screen, (174, 242, 200), (caminho_recente[i-1][1]*TAMANHO_TILE, caminho_recente[i-1][0]*TAMANHO_TILE, TAMANHO_TILE-1, TAMANHO_TILE-1))
+
+        # Desenha o mago na posição atual do caminho
+        screen.blit(mago, (y * TAMANHO_TILE, x * TAMANHO_TILE))
+
+        # Adicionando os png para portas e portal
+        screen.blit(door1, (90, 576))
+        screen.blit(door2, (702, 307))
+        screen.blit(door3, (433, 18))
+        screen.blit(portal, (108, 90))
+        
+        # Verificar se o jogador chegou à espada para remover imagem da espada
+        if celula == ponto_espada:
+            espada_coletada = True
+
+        if espada_coletada:
+            screen.blit(swordoff, (36, 18)) # Remove a espada da tela caso ela já tenha sido coletada
+
+        else:
+            screen.blit(sword, (36, 18)) # Adiciona a espada na tela caso ainda não tenha sido coletada
 
         # Desenhar a nova superfície na janela do Pygame
         screen.blit(screen, (0, 0))
         pygame.display.update()
-        clock.tick(25)
-
+        clock.tick(12)
 
 def criar_celulas(terreno_convertido):
     celulas = [[Celula((linha, coluna), CUSTO[terreno_convertido[linha][coluna]]) for coluna in range(COLUNAS)] for linha in range(LINHAS)]
@@ -234,7 +264,7 @@ while destinos:
             proximo_destino = i
 
     desenhar_terreno()
-    desenhar_caminho(melhor_caminho, proximo_destino)
+    desenhar_caminho(melhor_caminho, espada_coletada)
 
     if proximo_destino == ponto_destino1:
         cavernas.cavernas(caverna1, 1)
@@ -247,11 +277,12 @@ while destinos:
     
         # Adiciona o ponto de espada no final da lista, apos a ultima caverna ser acessada
         destinos.append(ponto_espada)
+    
+    elif proximo_destino == ponto_espada:
+        # Adiciona a chegada ao final da lista assim que a espada é capturada
+        destinos.append(chegada)
 
     screen = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
 
     partida = proximo_destino
     destinos.remove(proximo_destino)
-
-# Adicionar o caminho da espada
-
