@@ -2,8 +2,9 @@ import pygame
 import math
 import cavernas
 import sys
-sys.path.append("./ambiente/conversor-mapas")
+sys.path.append("./Zelda/functions")
 import converte_terreno
+sys.path.append("./Zelda/functions")
 import cria_terreno
 
 # Definir as cores dos diferentes tipos de terreno
@@ -101,13 +102,13 @@ def custo(celula_atual, vizinho):
     else:
         return float('inf')
     
-sword = pygame.image.load('./ambiente/icons/sword.png')
-swordoff = pygame.image.load('./ambiente/icons/swordoff.png')
-door1 = pygame.image.load('./ambiente/icons/door.png')
-door2 = pygame.image.load('./ambiente/icons/door.png')
-door3 = pygame.image.load('./ambiente/icons/door.png')
-portal = pygame.image.load('./ambiente/icons/portal.png')
-mago = pygame.image.load('./ambiente/icons/mago.png')
+sword = pygame.image.load('./Zelda/icons/sword.png')
+swordoff = pygame.image.load('./Zelda/icons/swordoff.png')
+door1 = pygame.image.load('./Zelda/icons/door.png')
+door2 = pygame.image.load('./Zelda/icons/door.png')
+door3 = pygame.image.load('./Zelda/icons/door.png')
+portal = pygame.image.load('./Zelda/icons/portal.png')
+mago = pygame.image.load('./Zelda/icons/mago.png')
 
 espada_coletada = False
 
@@ -273,17 +274,17 @@ while destinos:
     if proximo_destino == ponto_destino1:
         cavernas.cavernas(caverna1, 1)
         total = total + custo_total
-        print("Custo total da percurso na Caverna 1: " + str(custo_total))
+        print("Custo total do percurso na Caverna 1: " + str(custo_total))
 
     elif proximo_destino == ponto_destino2:
         cavernas.cavernas(caverna2, 2)
         total = total + custo_total
-        print("Custo total da percurso na Caverna 2: " + str(custo_total))
+        print("Custo total do percurso na Caverna 2: " + str(custo_total))
 
     elif proximo_destino == ponto_destino3:
         cavernas.cavernas(caverna3, 3)
         total = total + custo_total
-        print("Custo total da percurso na Caverna 3: " + str(custo_total))
+        print("Custo total do percurso na Caverna 3: " + str(custo_total))
 
         # Adiciona o ponto de espada no final da lista, apos a ultima caverna ser acessada
         destinos.append(ponto_espada)
@@ -291,13 +292,13 @@ while destinos:
     elif proximo_destino == ponto_espada:
         # Adiciona a chegada ao final da lista assim que a espada é capturada
         total = total + custo_total
-        print("Custo total do percurso até à Espada: " + str(custo_total))
+        print("Custo total do percurso até a Espada: " + str(custo_total))
         destinos.append(chegada)
 
     elif proximo_destino == chegada:
         # Adiciona a chegada ao final da lista assim que a espada é capturada
         total = total + custo_total
-        print("Custo total do percurso até à Chegada: " + str(custo_total))
+        print("Custo total do percurso até a Chegada: " + str(custo_total))
 
     screen = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
     partida = proximo_destino

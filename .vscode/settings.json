@@ -1,5 +1,7 @@
 {
     "python.analysis.extraPaths": [
-        "./ambiente/conversor-mapas"
+        "./ambiente/conversor-mapas",
+        "./ambiente/functions",
+        "./Zelda/functions"
     ]
 }

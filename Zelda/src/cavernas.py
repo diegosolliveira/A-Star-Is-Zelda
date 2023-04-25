@@ -1,7 +1,7 @@
 import pygame
 import math
 import sys
-sys.path.append("./ambiente/conversor-mapas")
+sys.path.append("./Zelda/functions")
 import converte_terreno
 
 # Definir as cores dos diferentes tipos de terreno
@@ -39,32 +39,32 @@ def cavernas(terreno, caverna):
     terreno_convertido = converte_terreno.converte_terreno(terreno, converte_variavel)
 
     # Adicionar as coordenadas do ponto de partida e destino das cavernas
-    mago = pygame.image.load('./ambiente/icons/mago.png')
+    mago = pygame.image.load('./Zelda/icons/mago.png')
     
     if(caverna == 1):
         ponto_partida = (26, 14)
         ponto_destino = (3, 13)
-        diamond = pygame.image.load('./ambiente/icons/diamond.png').convert()
-        diamondoff = pygame.image.load('./ambiente/icons/diamondoff.png').convert()
-        door = pygame.image.load('./ambiente/icons/doorcaverna.png').convert()
+        diamond = pygame.image.load('./Zelda/icons/diamond.png').convert()
+        diamondoff = pygame.image.load('./Zelda/icons/diamondoff.png').convert()
+        door = pygame.image.load('./Zelda/icons/doorcaverna.png').convert()
         posicao_diamond = (260, 61)
         posicao_door = ((281, 522))
     
     elif(caverna == 2):
         ponto_partida = (25, 13)
         ponto_destino = (2, 13)
-        diamond = pygame.image.load('./ambiente/icons/diamond.png').convert()
-        diamondoff = pygame.image.load('./ambiente/icons/diamondoff.png').convert()
-        door = pygame.image.load('./ambiente/icons/doorcaverna.png').convert()
+        diamond = pygame.image.load('./Zelda/icons/diamond.png').convert()
+        diamondoff = pygame.image.load('./Zelda/icons/diamondoff.png').convert()
+        door = pygame.image.load('./Zelda/icons/doorcaverna.png').convert()
         posicao_diamond = (261, 42)
         posicao_door = ((261, 502))
 
     else:
         ponto_partida = (25, 14)
         ponto_destino = (19, 15)
-        diamond = pygame.image.load('./ambiente/icons/diamond.png').convert()
-        diamondoff = pygame.image.load('./ambiente/icons/diamondoff.png').convert()
-        door = pygame.image.load('./ambiente/icons/doorcaverna.png').convert()
+        diamond = pygame.image.load('./Zelda/icons/diamond.png').convert()
+        diamondoff = pygame.image.load('./Zelda/icons/diamondoff.png').convert()
+        door = pygame.image.load('./Zelda/icons/doorcaverna.png').convert()
         posicao_diamond = (302, 383)
         posicao_door = ((281, 522))
 

@@ -13,7 +13,7 @@ caverna1 = []
 caverna2 = []
 caverna3 = []
 
-with open("./ambiente/mapas/terreno.txt", "r") as arquivo:
+with open("./Zelda/docs/terreno.txt", "r") as arquivo:
     mapa = arquivo.readlines()
     for linha in mapa:
         temp = []
@@ -22,7 +22,7 @@ with open("./ambiente/mapas/terreno.txt", "r") as arquivo:
                 temp.append(tipo_terreno[caracter])
         terreno.append(temp)
 
-with open("./ambiente/mapas/caverna1.txt", "r") as arquivo:
+with open("./Zelda/docs/caverna1.txt", "r") as arquivo:
     mapa = arquivo.readlines()
     for linha in mapa:
         temp = []
@@ -31,7 +31,7 @@ with open("./ambiente/mapas/caverna1.txt", "r") as arquivo:
                 temp.append(tipo_terreno[caracter])
         caverna1.append(temp)
 
-with open("./ambiente/mapas/caverna2.txt", "r") as arquivo:
+with open("./Zelda/docs/caverna2.txt", "r") as arquivo:
     mapa = arquivo.readlines()
     for linha in mapa:
         temp = []
@@ -40,7 +40,7 @@ with open("./ambiente/mapas/caverna2.txt", "r") as arquivo:
                 temp.append(tipo_terreno[caracter])
         caverna2.append(temp)
 
-with open("./ambiente/mapas/caverna3.txt", "r") as arquivo:
+with open("./Zelda/docs/caverna3.txt", "r") as arquivo:
     mapa = arquivo.readlines()
     for linha in mapa:
         temp = []
