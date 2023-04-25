@@ -15,6 +15,7 @@ AGUA = (30, 144, 255)
 CAMINHO = (224, 224, 224)
 PAREDE = (139, 137, 137)
 
+# Dicionário que pega a string e transforma em uma variável correspondente e para poder ser utilizado na definição do CUSTO
 converte_variavel = {
     "GRAMA": GRAMA,
     "AREIA": AREIA,
@@ -92,6 +93,8 @@ def heuristica(celula_atual, ponto_destino1):
     # Calcula e retorna a distância Euclidiana entre os pontos e multiplica por 10
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2) * 10
 
+# Calcula o custo entre a celula atual e o vizinho para saber se está acima, embaixo ou ao lado direito ou esquero.
+# Se for o caso retorna o valor do custo atual mais o valor do vizinho, caso contrário retorna um valor infinito indicando que não há caminho direto
 def custo(celula_atual, vizinho):
     if vizinho in celula_atual.vizinhos:
         return celula_atual.custo + vizinho.custo
@@ -145,6 +148,7 @@ def desenhar_caminho(caminho_recente, espada_coletada):
         clock.tick(12)
 
 # Essa função cria uma lista 2D, onde cada célula representa uma posição (linha, coluna) no terreno do jogo.
+# Além de que ele adiciona a lista de vizinhos a cada celula e armazena sua posição e custo utilizando o terreno convertido
 def criar_celulas(terreno_convertido):
     celulas = [[Celula((linha, coluna), CUSTO[terreno_convertido[linha][coluna]]) for coluna in range(COLUNAS)] for linha in range(LINHAS)]
     
@@ -246,6 +250,7 @@ def desenhar_terreno():
 
 destinos = [ponto_destino1, ponto_destino2, ponto_destino3]
 partida = ponto_partida
+total = 0
 
 #Loop para realizar os testes com todos os destinos
 while destinos:
@@ -267,21 +272,35 @@ while destinos:
 
     if proximo_destino == ponto_destino1:
         cavernas.cavernas(caverna1, 1)
+        total = total + custo_total
+        print("Custo total da percurso na Caverna 1: " + str(custo_total))
 
     elif proximo_destino == ponto_destino2:
         cavernas.cavernas(caverna2, 2)
+        total = total + custo_total
+        print("Custo total da percurso na Caverna 2: " + str(custo_total))
 
     elif proximo_destino == ponto_destino3:
         cavernas.cavernas(caverna3, 3)
-    
+        total = total + custo_total
+        print("Custo total da percurso na Caverna 3: " + str(custo_total))
+
         # Adiciona o ponto de espada no final da lista, apos a ultima caverna ser acessada
         destinos.append(ponto_espada)
     
     elif proximo_destino == ponto_espada:
         # Adiciona a chegada ao final da lista assim que a espada é capturada
+        total = total + custo_total
+        print("Custo total do percurso até à Espada: " + str(custo_total))
         destinos.append(chegada)
 
-    screen = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
+    elif proximo_destino == chegada:
+        # Adiciona a chegada ao final da lista assim que a espada é capturada
+        total = total + custo_total
+        print("Custo total do percurso até à Chegada: " + str(custo_total))
 
+    screen = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
     partida = proximo_destino
     destinos.remove(proximo_destino)
+
+print("Custo total de todo percurso: " + str(total))
