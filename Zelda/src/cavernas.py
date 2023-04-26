@@ -244,3 +244,5 @@ def cavernas(terreno, caverna):
     desenhar_caminho(caminho_inverso, diamante_coletado)
 
     screen = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
+
+    return custo_total

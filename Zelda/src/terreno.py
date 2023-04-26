@@ -59,9 +59,9 @@ terreno_convertido = converte_terreno.converte_terreno(terreno, converte_variave
 
 # Adicionar as coordenadas do ponto de partida e destino do terreno principal
 ponto_partida = (28, 25)
-ponto_destino1 = (32, 5)
-ponto_destino2 = (17, 39)
-ponto_destino3 = (1, 24)
+ponto_destino1 = (33, 6)
+ponto_destino2 = (18, 40)
+ponto_destino3 = (2, 25)
 ponto_espada = (1, 2)
 chegada = (6, 7)
 
@@ -128,9 +128,9 @@ def desenhar_caminho(caminho_recente, espada_coletada):
         screen.blit(mago, (y * TAMANHO_TILE, x * TAMANHO_TILE))
 
         # Adicionando os png para portas e portal
-        screen.blit(door1, (90, 576))
-        screen.blit(door2, (702, 307))
-        screen.blit(door3, (433, 18))
+        screen.blit(door1, (108, 594))
+        screen.blit(door2, (720, 324))
+        screen.blit(door3, (452, 36))
         screen.blit(portal, (126, 108))
         
         # Verificar se o jogador chegou à espada para remover imagem da espada
@@ -271,20 +271,23 @@ while destinos:
     desenhar_terreno()
     desenhar_caminho(melhor_caminho, espada_coletada)
 
+    if proximo_destino == ponto_destino1 or proximo_destino == ponto_destino2 or proximo_destino == ponto_destino3:
+        print("Custo até a porta " + str(proximo_destino) + ": " + str(menor_custo))
+
     if proximo_destino == ponto_destino1:
-        cavernas.cavernas(caverna1, 1)
-        total = total + custo_total
-        print("Custo total do percurso na Caverna 1: " + str(custo_total))
+        custo_caverna = cavernas.cavernas(caverna1, 1) * 2
+        total = total + menor_custo + custo_caverna
+        print("Custo total do percurso na Caverna 1: " + str(custo_caverna))
 
     elif proximo_destino == ponto_destino2:
-        cavernas.cavernas(caverna2, 2)
-        total = total + custo_total
-        print("Custo total do percurso na Caverna 2: " + str(custo_total))
+        custo_caverna = cavernas.cavernas(caverna2, 2) * 2
+        total = total + menor_custo + custo_caverna
+        print("Custo total do percurso na Caverna 2: " + str(custo_caverna))
 
     elif proximo_destino == ponto_destino3:
-        cavernas.cavernas(caverna3, 3)
-        total = total + custo_total
-        print("Custo total do percurso na Caverna 3: " + str(custo_total))
+        custo_caverna = cavernas.cavernas(caverna1, 1) * 2
+        total = total + menor_custo + custo_caverna
+        print("Custo total do percurso na Caverna 3: " + str(custo_caverna))
 
         # Adiciona o ponto de espada no final da lista, apos a ultima caverna ser acessada
         destinos.append(ponto_espada)
