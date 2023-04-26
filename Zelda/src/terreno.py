@@ -58,12 +58,12 @@ terreno = cria_terreno.retorna_terreno()
 terreno_convertido = converte_terreno.converte_terreno(terreno, converte_variavel)
 
 # Adicionar as coordenadas do ponto de partida e destino do terreno principal
-ponto_partida = (27, 24)
+ponto_partida = (28, 25)
 ponto_destino1 = (32, 5)
 ponto_destino2 = (17, 39)
 ponto_destino3 = (1, 24)
 ponto_espada = (1, 2)
-chegada = (5, 6)
+chegada = (6, 7)
 
 # Classe utilizada para representar cada célula do terreno, sabendo a posição e custo, além de criar/resetar g, h e f 
 # que são utilizados pelo algoritmo A*
@@ -131,7 +131,7 @@ def desenhar_caminho(caminho_recente, espada_coletada):
         screen.blit(door1, (90, 576))
         screen.blit(door2, (702, 307))
         screen.blit(door3, (433, 18))
-        screen.blit(portal, (108, 90))
+        screen.blit(portal, (126, 108))
         
         # Verificar se o jogador chegou à espada para remover imagem da espada
         if celula == ponto_espada:
