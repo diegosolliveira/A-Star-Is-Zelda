@@ -146,7 +146,7 @@ def desenhar_caminho(caminho_recente, espada_coletada):
         # Desenhar a nova superfície na janela do Pygame
         screen.blit(screen, (0, 0))
         pygame.display.update()
-        clock.tick(12)
+        clock.tick(33)
 
 # Essa função cria uma lista 2D, onde cada célula representa uma posição (linha, coluna) no terreno do jogo.
 # Além de que ele adiciona a lista de vizinhos a cada celula e armazena sua posição e custo utilizando o terreno convertido
@@ -285,7 +285,7 @@ while destinos:
         print("Custo total do percurso na Caverna 2: " + str(custo_caverna))
 
     elif proximo_destino == ponto_destino3:
-        custo_caverna = cavernas.cavernas(caverna1, 1) * 2
+        custo_caverna = cavernas.cavernas(caverna3, 3) * 2
         total = total + menor_custo + custo_caverna
         print("Custo total do percurso na Caverna 3: " + str(custo_caverna))
 
